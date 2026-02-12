@@ -1,0 +1,24 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+    - gosec
+    - bodyclose
+  settings:
+    gosec:
+      excludes:
+        - G104
+
+  exclusions:
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+
+run:
+  timeout: 2m
