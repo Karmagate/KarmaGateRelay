@@ -1,0 +1,46 @@
+Business Source License 1.1
+
+Parameters
+
+Licensor:             KarmaGate Inc.
+Licensed Work:        KarmaGate Relay Server
+                      The Licensed Work is (c) 2026 KarmaGate Inc.
+Additional Use Grant: You may make use of the Licensed Work, provided that
+                      you do not use the Licensed Work for a Relay Service.
+
+                      A "Relay Service" is a commercial offering that allows
+                      third parties to access the functionality of the
+                      Licensed Work by creating relay rooms, routing messages,
+                      or providing collaboration infrastructure as a service.
+
+                      For purposes of clarity, the following uses are
+                      explicitly permitted:
+                      - Self-hosting for your organization's internal use
+                      - Modifying the source code for your own internal use
+                      - Personal, educational, or research purposes
+                      - Non-commercial open source projects
+
+                      The following uses are explicitly prohibited:
+                      - Offering the Licensed Work as a commercial relay or
+                        collaboration service (whether paid or as part of a
+                        paid offering)
+                      - Incorporating the Licensed Work into a competing
+                        commercial security testing product
+
+Change Date:          Four years from the date of each Licensed Work release
+Change License:       Apache License, Version 2.0
+
+For information about alternative licensing arrangements for the Licensed Work,
+please contact: licensing@karmagate.com
+
+Notice
+
+Business Source License 1.1 (BUSL-1.1)
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
