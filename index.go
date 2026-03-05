@@ -9,7 +9,7 @@ const indexHTML = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KarmaGate Relay</title>
 <meta name="description" content="Lightweight, stateless WebSocket relay server for KarmaGate Bind">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Ccircle cx='54' cy='54' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='54' cy='13.5' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='90' cy='33.75' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='90' cy='74.25' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='54' cy='94.5' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='18' cy='74.25' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='18' cy='33.75' r='11' fill='%23DEDACF'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAB+UlEQVRYhe1VPU/bUBQ994ngFqlrmSIRlwTToIRipv6JdqjoVrVdOvRHUHVqdxYWQOqGGOBPdHLSxlGq2hiHKlKGjlQqTdz4diGOMS+EZ4rE4DvZ977zoffsdwgpi5nFsVsrAcBcyXSJKEzDQ2lAx25tMYTYBbB01rIRijXdqDqqXEIVwMwiIQ4AFYhwl5mV+ZQBPw7rCwnxyETbsYs3boCZOc3svxmYK5kuAFsyauhG1bu2Ad9vznpezex2rRkZgIhC4sHzhIkGD2ht3J/Q7VozR9/rq77fnL3AN3xotVrTd3L9TQJenrV+gfitXlz5JCMd/obMOS4sVFwikm6/79RfgGgDwD0AYGDnTzD9plwu988ZOHK+vCPCegIfIAxXdcOUbfnE8p16FUQWgKl4n4jXC8WV90DsCAThmYQjB0FP0ogDAAl6mhQHAMZIKzLAxGNuMqH8Zcek5FgeHVdkgIA9ydKAB+IgtfyA9wEEkkmkFRn43dc+ELAdW3XChFcPFitNKTmzaDuW0XYsY9wNqBumDaLXAE6GPQJvnQbax9F7ojyvcR/4m9e03rd8/vGpjFg1Czqdz3d7Pe0hMNWZn6/+jM+Uw4iZRfvwawMXr2O7UFx+pJqKWRZkWZBlQZYFWRZkWZBlwe3LgkmVJgsu5VMFDOuqWTCp/gFiFIF25aYc8gAAAABJRU5ErkJggg==">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
