@@ -9,7 +9,7 @@ const indexHTML = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KarmaGate Relay</title>
 <meta name="description" content="Lightweight, stateless WebSocket relay server for KarmaGate Bind">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'><circle cx='54' cy='54' r='11' fill='%23DEDACF'/><circle cx='54' cy='13.5' r='11' fill='%23DEDACF'/><circle cx='90' cy='33.75' r='11' fill='%23DEDACF'/><circle cx='90' cy='74.25' r='11' fill='%23DEDACF'/><circle cx='54' cy='94.5' r='11' fill='%23DEDACF'/><circle cx='18' cy='74.25' r='11' fill='%23DEDACF'/><circle cx='18' cy='33.75' r='11' fill='%23DEDACF'/></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Ccircle cx='54' cy='54' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='54' cy='13.5' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='90' cy='33.75' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='90' cy='74.25' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='54' cy='94.5' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='18' cy='74.25' r='11' fill='%23DEDACF'/%3E%3Ccircle cx='18' cy='33.75' r='11' fill='%23DEDACF'/%3E%3C/svg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
