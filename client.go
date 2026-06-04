@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -59,6 +60,11 @@ type Client struct {
 	role   string
 	ip     string
 	send   chan []byte
+
+	// dead marks a client whose send buffer overflowed on a data frame.
+	// Once set, the room stops sending to it (avoids send-on-closed panics)
+	// and the connection is closed so the peer reconnects and resyncs.
+	dead atomic.Bool
 
 	closeOnce sync.Once
 }

@@ -51,14 +51,25 @@ func (r *Room) Broadcast(senderConnID string, data []byte) {
 	defer r.mu.RUnlock()
 
 	r.lastActivity = time.Now()
+	isVoice := isVoicePacket(data)
 	for _, c := range r.clients {
-		if c.connID == senderConnID {
+		if c.connID == senderConnID || c.dead.Load() {
 			continue
 		}
 		select {
 		case c.send <- data:
 		default:
-			// Client's send buffer full — drop message
+			// Send buffer full.
+			if isVoice {
+				// Voice is real-time: dropping a frame is acceptable.
+				continue
+			}
+			// Dropping a DATA frame would silently desync this peer.
+			// Mark it dead and close the connection so it reconnects and
+			// pulls a fresh snapshot. Never send to it again (avoids
+			// send-on-closed-channel panics from later broadcasts).
+			c.dead.Store(true)
+			c.Close()
 		}
 	}
 }
