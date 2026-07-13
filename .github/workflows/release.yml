@@ -36,7 +36,7 @@ jobs:
 
   notify:
     needs: [release]
-    if: always()
+    if: always() && needs.release.result == 'failure'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
         with:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
-          status: ${{ needs.release.result }}
+          status: failure
           workflow: ${{ github.workflow }}
           repo: ${{ github.repository }}
           run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

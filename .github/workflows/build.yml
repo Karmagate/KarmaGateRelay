@@ -57,28 +57,15 @@ jobs:
 
   notify:
     needs: [test, build]
-    if: always()
+    if: failure()
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: aggregate
-        env:
-          TEST_RESULT: ${{ needs.test.result }}
-          BUILD_RESULT: ${{ needs.build.result }}
-        run: |
-          RESULTS="$TEST_RESULT $BUILD_RESULT"
-          if echo "$RESULTS" | grep -q failure; then
-            echo "status=failure" >> $GITHUB_OUTPUT
-          elif echo "$RESULTS" | grep -q cancelled; then
-            echo "status=cancelled" >> $GITHUB_OUTPUT
-          else
-            echo "status=success" >> $GITHUB_OUTPUT
-          fi
       - uses: ./.github/actions/telegram-notify
         with:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
-          status: ${{ steps.aggregate.outputs.status }}
+          status: failure
           workflow: ${{ github.workflow }}
           repo: ${{ github.repository }}
           run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
