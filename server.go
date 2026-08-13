@@ -4,9 +4,12 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/base64"
+	"errors"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -37,6 +40,7 @@ func NewServer(cfg *Config, hub *Hub) *Server {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", s.handleIndex)
 	mux.HandleFunc("/health", s.handleHealth)
+	mux.HandleFunc("/v1/rooms/", s.handleRoomStatus)
 	mux.HandleFunc("/ws", s.handleWS)
 
 	s.srv = &http.Server{
@@ -74,6 +78,34 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte(`{"status":"ok"}`))
+}
+
+// handleRoomStatus serves GET /v1/rooms/{id}/status for Resume UI probes.
+// No secrets — only alive/clients/has_host_key. Rate-limited per IP.
+func (s *Server) handleRoomStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	ip := clientIP(r)
+	if !s.limiter.Allow(ip) {
+		http.Error(w, "rate limit exceeded", http.StatusTooManyRequests)
+		return
+	}
+
+	// Path: /v1/rooms/{id}/status
+	path := strings.TrimPrefix(r.URL.Path, "/v1/rooms/")
+	path = strings.Trim(path, "/")
+	parts := strings.Split(path, "/")
+	if len(parts) != 2 || parts[1] != "status" || parts[0] == "" {
+		http.Error(w, "not found", http.StatusNotFound)
+		return
+	}
+	roomID := parts[0]
+	st := s.hub.RoomStatus(roomID)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = fmt.Fprintf(w, `{"alive":%t,"clients":%d,"has_host_key":%t}`, st.Alive, st.Clients, st.HasHostKey)
 }
 
 func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +146,15 @@ func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "room mismatch", http.StatusForbidden)
 			return
 		}
-		s.hub.RegisterHostKey(roomID, hostPubKey)
+		// Same-key reclaim OK; different pubkey while grace/key live → hijack.
+		if regErr := s.hub.TryRegisterHostKey(roomID, hostPubKey); regErr != nil {
+			if errors.Is(regErr, ErrHostKeyConflict) {
+				http.Error(w, "host key conflict", http.StatusForbidden)
+				return
+			}
+			http.Error(w, "host key register failed", http.StatusBadRequest)
+			return
+		}
 	} else {
 		hostKey := s.hub.GetHostKey(roomID)
 		if hostKey == nil {

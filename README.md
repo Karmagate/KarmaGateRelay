@@ -293,9 +293,12 @@ All configuration via environment variables:
 | `RELAY_MAX_ROOMS` | `1000` | Maximum concurrent rooms |
 | `RELAY_MAX_CLIENTS_PER_ROOM` | `20` | Maximum clients per room |
 | `RELAY_MAX_MESSAGE_SIZE` | `1048576` | Maximum WebSocket message size (bytes) |
-| `RELAY_ROOM_IDLE_TIMEOUT` | `3600` | Room idle timeout (seconds) |
+| `RELAY_ROOM_IDLE_TIMEOUT` | `3600` | Room idle timeout (seconds); clamped ≥ `RELAY_HOST_KEY_GRACE` |
+| `RELAY_HOST_KEY_GRACE` | `900` | Keep host **public** key after room empties (seconds). Guests can join in this window; host same-key reclaim works even after. |
 | `RELAY_RATE_LIMIT_PER_IP` | `100` | WebSocket connections per second per IP |
 | `RELAY_METRICS_ADDR` | — | Prometheus metrics address (e.g. `:9090`) |
+
+**Session model:** relay rooms are ephemeral (empty → grace → gone). KarmaGate projects keep creator resume keys until **End Session**; host reconnect with the same Ed25519 key re-registers the room. A different pubkey for an existing room is rejected (`403 host key conflict`).
 
 ### Docker Compose
 

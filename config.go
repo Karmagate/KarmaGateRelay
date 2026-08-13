@@ -14,12 +14,13 @@ type Config struct {
 	MaxClientsPerRoom int
 	MaxMessageSize    int64
 	RoomIdleTimeout   time.Duration
+	HostKeyGrace      time.Duration
 	RateLimitPerIP    float64
 	MetricsAddr       string
 }
 
 func LoadConfig() *Config {
-	return &Config{
+	cfg := &Config{
 		Addr:              envStr("RELAY_ADDR", ":8443"),
 		TLSCert:           envStr("RELAY_TLS_CERT", ""),
 		TLSKey:            envStr("RELAY_TLS_KEY", ""),
@@ -27,9 +28,17 @@ func LoadConfig() *Config {
 		MaxClientsPerRoom: envInt("RELAY_MAX_CLIENTS_PER_ROOM", 20),
 		MaxMessageSize:    int64(envInt("RELAY_MAX_MESSAGE_SIZE", 52428800)),
 		RoomIdleTimeout:   time.Duration(envInt("RELAY_ROOM_IDLE_TIMEOUT", 3600)) * time.Second,
-		RateLimitPerIP:    float64(envInt("RELAY_RATE_LIMIT_PER_IP", 100)),
-		MetricsAddr:       envStr("RELAY_METRICS_ADDR", ""),
+		// Keep host pubkey after last client leaves so guests can still join
+		// briefly. Host reclaim with the same Ed25519 key works even after grace.
+		HostKeyGrace:   time.Duration(envInt("RELAY_HOST_KEY_GRACE", 900)) * time.Second,
+		RateLimitPerIP: float64(envInt("RELAY_RATE_LIMIT_PER_IP", 100)),
+		MetricsAddr:    envStr("RELAY_METRICS_ADDR", ""),
 	}
+	// Idle cleanup must not drop rooms/keys earlier than guest grace window.
+	if cfg.HostKeyGrace > 0 && cfg.RoomIdleTimeout < cfg.HostKeyGrace {
+		cfg.RoomIdleTimeout = cfg.HostKeyGrace
+	}
+	return cfg
 }
 
 func envStr(key, fallback string) string {
